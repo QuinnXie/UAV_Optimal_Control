@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="f450">
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0 0 0 1" />
+      </material>
+    </visual>
+  </link>
+
+  <link name="leg_link">   
+    <visual>
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/leg_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="leg_link_joint" type="fixed">
+    <origin
+      xyz="0 0 0.132"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="leg_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <link
+    name="battery_link">
+    
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/battery_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+  
+  </link>
+  <joint
+    name="battery_link_joint"
+    type="fixed">
+    <origin
+      xyz="-0.025435 -0.00022216 0.09"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="battery_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="jetson_link">
+    
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/jetson_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+  
+  </link>
+  <joint
+    name="jetson_link_joint"
+    type="fixed">
+    <origin
+      xyz="0.00570216508420152 0.000181695463436604 0.210999999999999"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="jetson_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="d435_link">
+
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/d435_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    
+  </link>
+  <joint
+    name="d435_link_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="d435_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="t265_link">
+   
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/t265_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+   
+  </link>
+  <joint
+    name="t265_link_joint"
+    type="fixed">
+    <origin
+      xyz="0.0824052505915125 -0.00862818550105304 0.118529424882819"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="t265_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="front_arm_link">
+   
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/front_arm_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0 0 1" />
+      </material>
+    </visual>
+  
+  </link>
+  <joint
+    name="front_arm_link_joint"
+    type="fixed">
+    <origin
+      xyz="0.0980914901926783 0.0980914949967722 0.170999999999999"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_arm_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="back_arm_link">
+   
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/back_arm_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+  
+  </link>
+  <joint
+    name="back_arm_link_joint"
+    type="fixed">
+    <origin
+      xyz="-0.098091 -0.098091 0.171"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="back_arm_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="prop_guard_link">
+    
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/prop_guard_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    
+  </link>
+  <joint
+    name="prop_guard_link_joint"
+    type="fixed">
+    <origin
+      xyz="0 3.6966E-05 0.171"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="prop_guard_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <link
+    name="motor_link">
+   
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/motor_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+  
+  </link>
+
+  <joint
+    name="motor_link_joint"
+    type="fixed">
+    <origin
+      xyz="-0.00077732 0.0001817 0.173"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="motor_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+
+  <link
+    name="rotor1">
+
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/rotor1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+  
+  </link>
+
+  <joint
+    name="rotor1_joint"
+    type="continuous">
+    <origin
+      xyz="0.15988 0.15988 0.21"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rotor1" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+
+  <link
+    name="rotor2">
+  
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/rotor1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    
+  </link>
+  
+  <joint
+    name="rotor2_joint"
+    type="continuous">
+    <origin
+      xyz="-0.15988 -0.15988 0.21"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rotor2" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="rotor3">
+   
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/rotor1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    
+  </link>
+  <joint
+    name="rotor3_joint"
+    type="continuous">
+    <origin
+      xyz="0.15988 -0.15988 0.21"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rotor3" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="rotor4">
+  
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://f450/meshes/rotor1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+ 
+  </link>
+  <joint
+    name="rotor4_joint"
+    type="continuous">
+    <origin
+      xyz="-0.15988 0.15988 0.21"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rotor4" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+</robot>

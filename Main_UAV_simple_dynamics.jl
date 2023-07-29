@@ -19,20 +19,31 @@ const T₁ = 0.0        # table right below corner x - position
 const T₂ = 0.0        # table right below corner y - position
 
 # UAV parameters
-const m = 1.8
-const Ixx = 0.029125
-const Iyy = 0.029125
-const Izz = 0.055225
-const r₁ = 0.45       # radius of UAV
+const m = 1.540820046
+const Ixx = 0.0053423608
+const Iyy = 0.0039935015
+const Izz = 0.0452023222
+const r₁ = 0.3       # radius of UAV
 
 const g = 9.8
+
+# # initial position
+# const A₁ = -8.5
+# const A₂ = 1.0
+# const A₃ = 1.5
+
+# # final position
+# const B₁ = 8.0
+# const B₂ = 1.0
+# const B₃ = 1.5
 
 # initial position
 const A₁ = -8.5
 const A₂ = 1.0
-const A₃ = 1.5
+const A₃ = 0.0
+
 # final position
-const B₁ = 8.0
+const B₁ = -8.5
 const B₂ = 1.0
 const B₃ = 1.5
 
@@ -64,7 +75,7 @@ const z₁_upp = H
 
 const v_max = 20.0           # maximum velocity
 const w_max = 5.0            # maximum angular velocity
-const F_max = 100.0          # maximum acceleration
+const F_max = 60.0          # maximum acceleration
 const M_max = 10.0           # maximum angular acceleration
 
 ## Final conditions, the so-called Terminal Area Energy Management (TAEM)
@@ -111,7 +122,6 @@ user_options = (
 
 ## Create JuMP model, using Ipopt as the solver
 model = Model(optimizer_with_attributes(Ipopt.Optimizer, user_options...))
-# model = Model(optimizer_with_attributes(HiGHS.Optimizer, user_options...))
 
 @variables(model, begin
     x₁_low ≤ q₁[1:n] ≤ x₁_upp
@@ -161,7 +171,7 @@ x_s = [q₁_s, q₂_s, q₃_s, q₄_s, q₅_s, q₆_s, δq₁_s, δq₂_s, δq�
 x_t = [q₁_t, q₂_t, q₃_t, q₄_t, q₅_t, q₆_t, δq₁_t, δq₂_t, δq₃_t, u₁_t, u₂_t, u₃_t, u₄_t, t_s]
 interp_linear = Interpolations.LinearInterpolation([1, n], [x_s, x_t])
 initial_guess = mapreduce(transpose, vcat, interp_linear.(1:n))
-initial_guess[:,2] = [LinRange(1.0, -1.3, 500); LinRange(-1.3, 1.0, 501)]
+# initial_guess[:,2] = [LinRange(1.0, -1.3, 500); LinRange(-1.3, 1.0, 501)]
 set_start_value.(all_variables(model), vec(initial_guess))
 
 ## System dynamics
@@ -174,7 +184,7 @@ set_start_value.(all_variables(model), vec(initial_guess))
 # ̇ϕ = p + (q⋅sinϕ + r⋅cosϕ)⋅tanθ
 # ̇θ = q⋅conϕ - r⋅sinϕ
 # ̇ψ = (q⋅sinϕ + r⋅cosϕ)/cosθ
-# ̇v_x = (sinψ⋅sinϕ + cosψ⋅sinθ⋅sinϕ)⋅T/m
+# ̇v_x = (sinψ⋅sinϕ + cosψ⋅sinθ⋅cosϕ)⋅T/m
 # ̇v_y = (-cosψ⋅sinϕ + sinψ⋅sinθ⋅cosϕ)⋅T/m
 # ̇v_z = -g + cosθ⋅cosϕ⋅T/m
 # ̇p = 1/Ixx⋅L + (Iyy - Izz)/Ixx⋅r⋅q
@@ -218,7 +228,7 @@ end
 ## Objective: minimize control effort
 # @objective(model, Min, sum(Δt[j] for j in 1:N))
 # @objective(model, Min, sum(Δt[j] for j in 1:N) + 0.05*sum((u₁[j]^2 + u₂[j]^2 + u₃[j]^2 + u₄[j]^2 + u₅[j]^2 + u₆[j]^2) for j in 1:n))
-@NLobjective(model, Min, sum(Δt[j]*(u₁[j]^2 + u₂[j]^2 + u₃[j]^2 + u₄[j]^2) for j in 1:N))
+@NLobjective(model, Min, sum((u₁[j]^2 + u₂[j]^2 + u₃[j]^2 + u₄[j]^2) for j in 1:n))
 
 # set_silent(model)  # Hide solver's verbose output
 optimize!(model)  # Solve for the control and state
@@ -308,15 +318,26 @@ plt_angular = plot!(plt_angular,
     label="r", 
 )
 
+plt_Thrust = plot(
+    ts[1:1001], value.(u₁)[1:1001], 
+    title="UAV Thrust",
+    label="T", 
+    ylabel="Thrust (N)", 
+    xlabel="time (s)",
+    )
+
+
 display(plt_position)
 display(plt_velocity)
 display(plt_angle)
 display(plt_angular)
+display(plt_Thrust)
 
 savefig(plt_position, "plt_position_UAV")
 savefig(plt_velocity, "plt_velocity_UAV")
 savefig(plt_angle, "plt_angle_UAV")
 savefig(plt_angular, "plt_angular_UAV")
+savefig(plt_Thrust, "plt_Thrust_UAV")
 
 using CSV
 using DataFrames
@@ -343,4 +364,5 @@ df = DataFrame(time = ts,
                r = value.(u₄),
                )
 
-CSV.write("export_uav_data.csv", df) 
+# CSV.write("export_uav_data.csv", df, newline='\n') 
+CSV.write("export_uav_data1.csv", df, newline='\n') 

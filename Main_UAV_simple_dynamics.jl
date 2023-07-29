@@ -5,7 +5,7 @@ using Polynomials
 using Plots
 
 include("interp.jl")
-
+include("Quaternion.jl")
 ## Global variables
 
 ## Physical parameters for the cart-pole example (Standard units)
@@ -95,7 +95,7 @@ u₂_t = 0.0
 u₃_t = 0.0
 u₄_t = 0.0
 ## Number of mesh points (knots) to be used
-N = 1000
+N = 200
 n = N+1
 
 T = 10.0
@@ -240,6 +240,17 @@ println(
     round(objective_value(model); digits = 2),
 )
 
+Δx = q₁_t .- value.(q₁)
+Δy = q₂_t .- value.(q₂)
+Δz = q₃_t .- value.(q₃)
+
+dist = sqrt.(Δx.^2 + Δy.^2 + Δz.^2)
+
+q = zeros(n,4)
+for i in 1:n 
+    q[i,:] = ToQuaternion(value.(q₄)[i], value.(q₅)[i], value.(q₆)[i])
+end
+
 ts = cumsum([0;value.(Δt)])[1:end-1]
 
 # position and angle
@@ -319,7 +330,7 @@ plt_angular = plot!(plt_angular,
 )
 
 plt_Thrust = plot(
-    ts[1:1001], value.(u₁)[1:1001], 
+    ts[1:n], value.(u₁)[1:n], 
     title="UAV Thrust",
     label="T", 
     ylabel="Thrust (N)", 
@@ -333,11 +344,11 @@ display(plt_angle)
 display(plt_angular)
 display(plt_Thrust)
 
-savefig(plt_position, "plt_position_UAV")
-savefig(plt_velocity, "plt_velocity_UAV")
-savefig(plt_angle, "plt_angle_UAV")
-savefig(plt_angular, "plt_angular_UAV")
-savefig(plt_Thrust, "plt_Thrust_UAV")
+savefig(plt_position, "plt//plt_position_UAV")
+savefig(plt_velocity, "plt//plt_velocity_UAV")
+savefig(plt_angle, "plt//plt_angle_UAV")
+savefig(plt_angular, "plt//plt_angular_UAV")
+savefig(plt_Thrust, "plt//plt_Thrust_UAV")
 
 using CSV
 using DataFrames
@@ -362,7 +373,15 @@ df = DataFrame(time = ts,
                p = value.(u₂),
                q = value.(u₃),
                r = value.(u₄),
+               dist_x = Δx,
+               dist_y = Δy,
+               dist_z = Δz,
+               distance = dist,
+               q_w = q[:,1],
+               q_x = q[:,2],
+               q_y = q[:,3],
+               q_z = q[:,4]
                )
 
-# CSV.write("export_uav_data.csv", df, newline='\n') 
-CSV.write("export_uav_data1.csv", df, newline='\n') 
+CSV.write("export_uav_data.csv", df, newline='\n') 
+# CSV.write("export_uav_data1.csv", df, newline='\n') 

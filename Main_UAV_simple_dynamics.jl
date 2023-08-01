@@ -28,24 +28,24 @@ const r₁ = 0.3       # radius of UAV
 const g = 9.8
 
 # # initial position
-# const A₁ = -8.5
-# const A₂ = 1.0
-# const A₃ = 1.5
-
-# # final position
-# const B₁ = 8.0
-# const B₂ = 1.0
-# const B₃ = 1.5
-
-# initial position
 const A₁ = -8.5
 const A₂ = 1.0
-const A₃ = 0.0
+const A₃ = 1.5
 
-# final position
-const B₁ = -8.5
+# # final position
+const B₁ = 8.0
 const B₂ = 1.0
 const B₃ = 1.5
+
+# initial position
+# const A₁ = -8.5
+# const A₂ = 1.0
+# const A₃ = 0.0
+
+# final position
+# const B₁ = -8.5
+# const B₂ = 1.0
+# const B₃ = 1.5
 
 const γ = 1.0
 ## Initial conditions
@@ -171,7 +171,7 @@ x_s = [q₁_s, q₂_s, q₃_s, q₄_s, q₅_s, q₆_s, δq₁_s, δq₂_s, δq�
 x_t = [q₁_t, q₂_t, q₃_t, q₄_t, q₅_t, q₆_t, δq₁_t, δq₂_t, δq₃_t, u₁_t, u₂_t, u₃_t, u₄_t, t_s]
 interp_linear = Interpolations.LinearInterpolation([1, n], [x_s, x_t])
 initial_guess = mapreduce(transpose, vcat, interp_linear.(1:n))
-# initial_guess[:,2] = [LinRange(1.0, -1.3, 500); LinRange(-1.3, 1.0, 501)]
+initial_guess[:,2] = [LinRange(1.0, -1.3, Integer(N/2)); LinRange(-1.3, 1.0, Integer(N/2)+1)]
 set_start_value.(all_variables(model), vec(initial_guess))
 
 ## System dynamics

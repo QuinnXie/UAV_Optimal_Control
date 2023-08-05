@@ -76,7 +76,7 @@ const z₁_upp = H
 
 const v_max = 20.0           # maximum velocity
 const w_max = 5.0            # maximum angular velocity
-const F_max = 60.0          # maximum acceleration
+const T_max = 19.35          # maximum acceleration
 const M_max = 10.0           # maximum angular acceleration
 
 ## Final conditions, the so-called Terminal Area Energy Management (TAEM)
@@ -99,8 +99,8 @@ u₄_t = 0.0
 N = 200
 n = N+1
 
-T = 10.0
-t_s = T/N
+Time = 10.0
+t_s = Time/N
 
 ## Integration scheme to be used for the dynamics
 # const integration_rule = "rectangular" 
@@ -134,7 +134,7 @@ model = Model(optimizer_with_attributes(Ipopt.Optimizer, user_options...))
     -v_max ≤ δq₁[1:n] ≤ v_max
     -v_max ≤ δq₂[1:n] ≤ v_max
     -v_max ≤ δq₃[1:n] ≤ v_max
-    -F_max ≤ u₁[1:n] ≤ F_max
+    0 ≤ u₁[1:n] ≤ T_max
     -w_max ≤ u₂[1:n] ≤ w_max
     -w_max ≤ u₃[1:n] ≤ w_max
     -w_max ≤ u₄[1:n] ≤ w_max
@@ -354,6 +354,7 @@ savefig(plt_Thrust, "plt//plt_Thrust_UAV")
 using CSV
 using DataFrames
 
+Thrust_scale = value.(u₁) ./ T_max
 df = DataFrame(time = ts, 
                x = value.(q₁),
                y = value.(q₂),
@@ -371,6 +372,7 @@ df = DataFrame(time = ts,
                a_y = value.(δ²q₂),
                a_z = value.(δ²q₃),
                Thrust = value.(u₁),
+               Thrust_Scale = Thrust_scale,
                p = value.(u₂),
                q = value.(u₃),
                r = value.(u₄),

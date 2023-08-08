@@ -24,7 +24,7 @@ const m = 1.540820046
 const Ixx = 0.0053423608
 const Iyy = 0.0039935015
 const Izz = 0.0452023222
-const r₁ = 0.3       # radius of UAV
+const r₁ = 0.35       # radius of UAV 0.3
 
 const g = 9.8
 
@@ -224,7 +224,8 @@ for j in 2:n
 end
 
 
-@NLconstraint(model, [j = 1:n], ((q₁[j]-l/2)^2 / ((l/2+r₁)^2*2) + (q₂[j]-w/2)^2 / ((w/2+r₁)^2*2)) ≥ 1.0)
+# @NLconstraint(model, [j = 1:n], ((q₁[j]-l/2)^2 / ((l/2+r₁)^2*2) + (q₂[j]-w/2)^2 / ((w/2+r₁)^2*2)) ≥ 1.0)
+@NLconstraint(model, [j = 1:n], (((q₁[j]-l/2) / ((l/2+r₁)))^6 + ((q₂[j]-w/2) / ((w/2+r₁)))^8) ≥ 1.0)
 
 ## Objective: minimize control effort
 # @objective(model, Min, sum(Δt[j] for j in 1:N))

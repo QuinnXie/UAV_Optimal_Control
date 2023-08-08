@@ -23,7 +23,7 @@ const m = 1.540820046
 const Ixx = 0.0053423608
 const Iyy = 0.0039935015
 const Izz = 0.0452023222
-const r₁ = 0.3       # radius of UAV
+const r₁ = 0.35       # radius of UAV 0.3
 
 const g = 9.8
 
@@ -223,7 +223,9 @@ for j in 2:n
 end
 
 
-@NLconstraint(model, [j = 1:n], ((q₁[j]-l/2)^2 / ((l/2+r₁)^2*2) + (q₂[j]-w/2)^2 / ((w/2+r₁)^2*2)) ≥ 1.0)
+# @NLconstraint(model, [j = 1:n], ((q₁[j]-l/2)^2 / ((l/2+r₁)^2*2) + (q₂[j]-w/2)^2 / ((w/2+r₁)^2*2)) ≥ 1.0)
+@NLconstraint(model, [j = 1:n], (((q₁[j]-l/2) / ((l/2+r₁)))^6 + ((q₂[j]-w/2) / ((w/2+r₁)))^8) ≥ 1.0)
+# @NLconstraint(model, [j = 1:n], (((q₁[j]-l/2) / ((l/2+r₁)))^(l/r₁+2) + ((q₂[j]-w/2) / ((w/2+r₁)))^(w/r₁+2)) ≥ 1.0)
 
 ## Objective: minimize control effort
 # @objective(model, Min, sum(Δt[j] for j in 1:N))
@@ -338,18 +340,6 @@ plt_Thrust = plot(
     )
 
 
-display(plt_position)
-display(plt_velocity)
-display(plt_angle)
-display(plt_angular)
-display(plt_Thrust)
-
-savefig(plt_position, "plt//plt_position_UAV")
-savefig(plt_velocity, "plt//plt_velocity_UAV")
-savefig(plt_angle, "plt//plt_angle_UAV")
-savefig(plt_angular, "plt//plt_angular_UAV")
-savefig(plt_Thrust, "plt//plt_Thrust_UAV")
-
 using CSV
 using DataFrames
 
@@ -387,3 +377,53 @@ df = DataFrame(time = ts,
 
 CSV.write("export_uav_data.csv", df, newline='\n') 
 # CSV.write("export_uav_data1.csv", df, newline='\n') 
+
+
+## plot the no-fly zone
+
+l₁ = l
+w₁ = w
+r = r₁
+
+a₁ = l₁/2 + r
+b₁ = w₁/2 + r
+
+α = (l₁/r + 2)
+β = (w₁/r + 2)
+# α = round(l₁/r + 2)
+# β = round(w₁/r + 2)
+
+x₁ = -a₁ : 0.005 : a₁
+y₁ = b₁ .* (1 .- (abs.(x₁)./a₁).^α) .^(1/β)
+
+y₂ = -y₁
+
+x₁ = x₁ .+ l₁/2
+y₁ = y₁ .+ w₁/2
+y₂ = y₂ .+ w₁/2
+
+plt_barrier = plot!(plt_position,
+    x₁, y₁;
+    line = :dash,
+    color = :green,
+    label = nothing,
+    )
+
+plt_barrier = plot!(plt_position,
+    x₁, y₂;
+    line = :dash,
+    color = :green,
+    label = nothing,
+    )
+
+display(plt_position)
+display(plt_velocity)
+display(plt_angle)
+display(plt_angular)
+display(plt_Thrust)
+
+savefig(plt_position, "plt//plt_position_UAV")
+savefig(plt_velocity, "plt//plt_velocity_UAV")
+savefig(plt_angle, "plt//plt_angle_UAV")
+savefig(plt_angular, "plt//plt_angular_UAV")
+savefig(plt_Thrust, "plt//plt_Thrust_UAV")

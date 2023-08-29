@@ -223,8 +223,8 @@ for j in 2:n
 end
 
 
-# @NLconstraint(model, [j = 1:n], ((q₁[j]-l/2)^2 / ((l/2+r₁)^2*2) + (q₂[j]-w/2)^2 / ((w/2+r₁)^2*2)) ≥ 1.0)
-@NLconstraint(model, [j = 1:n], (((q₁[j]-l/2) / ((l/2+r₁)))^6 + ((q₂[j]-w/2) / ((w/2+r₁)))^8) ≥ 1.0)
+@NLconstraint(model, [j = 1:n], ((q₁[j]-l/2)^2 / ((l/2+r₁)^2*2) + (q₂[j]-w/2)^2 / ((w/2+r₁)^2*2)) ≥ 1.0)
+# @NLconstraint(model, [j = 1:n], (((q₁[j]-l/2) / ((l/2+r₁)))^6 + ((q₂[j]-w/2) / ((w/2+r₁)))^8) ≥ 1.0)
 # @NLconstraint(model, [j = 1:n], (((q₁[j]-l/2) / ((l/2+r₁)))^(l/r₁+2) + ((q₂[j]-w/2) / ((w/2+r₁)))^(w/r₁+2)) ≥ 1.0)
 
 ## Objective: minimize control effort

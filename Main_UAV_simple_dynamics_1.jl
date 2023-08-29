@@ -40,12 +40,12 @@ const g = 9.8
 
 # initial position
 const A₁ = -8.5
-const A₂ = 1.0
+const A₂ = 0.0
 const A₃ = 0.0
 
 # final position
 const B₁ = -8.5
-const B₂ = 1.0
+const B₂ = 0.0
 const B₃ = 1.5
 
 const γ = 1.0

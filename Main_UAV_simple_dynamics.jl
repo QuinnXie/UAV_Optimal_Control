@@ -29,12 +29,12 @@ const g = 9.8
 
 # # initial position
 const A₁ = -8.5
-const A₂ = 1.0
+const A₂ = 0.0
 const A₃ = 1.5
 
 # # final position
 const B₁ = 8.0
-const B₂ = 1.0
+const B₂ = 0.0
 const B₃ = 1.5
 
 # initial position
@@ -427,3 +427,61 @@ savefig(plt_velocity, "plt//plt_velocity_UAV")
 savefig(plt_angle, "plt//plt_angle_UAV")
 savefig(plt_angular, "plt//plt_angular_UAV")
 savefig(plt_Thrust, "plt//plt_Thrust_UAV")
+
+
+## Validation: generate the trajectory according to the acceleration
+function Traj_v_a(x₀, y₀, z₀, vx, vy, vz, ax, ay, az, Δt)
+    x = zeros(size(ax)) .+ x₀
+    y = zeros(size(ay)) .+ y₀
+    z = zeros(size(az)) .+ z₀
+
+    for i in eachindex(vx)
+        x[i+1] = x[i] + Δt*vx[i] + 0.5*Δt^2*ax[i]
+        y[i+1] = y[i] + Δt*vy[i] + 0.5*Δt^2*ay[i]
+        z[i+1] = z[i] + Δt*vz[i] + 0.5*Δt^2*az[i]
+    end
+    
+    return x, y, z
+end
+
+function Traj_a(x₀, y₀, z₀, ax, ay, az, Δt)
+    x = zeros(size(ax)) .+ x₀
+    y = zeros(size(ay)) .+ y₀
+    z = zeros(size(az)) .+ z₀
+
+    vx = zeros(size(ax))
+    vy = zeros(size(ay))
+    vz = zeros(size(az))
+
+    for i in 1:(length(ax)-1)
+        vx[i+1] = vx[i] + Δt*ax[i]
+        vy[i+1] = vy[i] + Δt*ay[i]
+        vz[i+1] = vz[i] + Δt*az[i]
+    end
+
+    for i in 1:(length(ax)-1)
+        x[i+1] = x[i] + Δt*vx[i] + 0.5*Δt^2*ax[i]
+        y[i+1] = y[i] + Δt*vy[i] + 0.5*Δt^2*ay[i]
+        z[i+1] = z[i] + Δt*vz[i] + 0.5*Δt^2*az[i]
+    end
+    
+    return x, y, z
+end
+
+traj_x, traj_y, traj_z = Traj_a(A₁, A₂, A₃, value.(δ²q₁), value.(δ²q₂), value.(δ²q₃), t_s)
+
+plt_position_traj = plot(
+    traj_x, traj_y;
+    # seriestype=:scatter, markersize=2, 
+    xlims=(-L/2, L/2),
+    ylims=(-W/2, W/2), 
+    label="UAV",
+    title = "UAV trajectory",
+    ylabel="y (m)", xlabel="x (m)",
+    )
+
+plt_position_traj = plot!(plt_position_traj,
+    [0.0, l, l, 0.0, 0.0], [0.0, 0.0, w, w, 0.0];
+    # seriestype=:scatter, markersize=2, 
+    label="obstacle",
+    )
